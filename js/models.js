@@ -73,8 +73,27 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory( /* user, newStory */) {
+  async addStory(user, newStory) {
     // UNIMPLEMENTED: complete this function!
+    // let req = {
+    //   token: user.loginToken,
+    //   story: newStory,
+    // };
+    
+    // let res = await axios.post("https://hack-or-snooze-v3.herokuapp.com/stories",
+    //   {params: req});    
+      
+    let res = await axios({
+      url: `${BASE_URL}/stories`,
+      method: "POST",
+      token: user.loginToken,
+      story: newStory
+    });
+
+    // console.log(res.story);
+    let someStory = new Story(res);
+    console.log(someStory);
+    // return someStory;
   }
 }
 
