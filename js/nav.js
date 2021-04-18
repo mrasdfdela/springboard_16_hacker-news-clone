@@ -32,5 +32,16 @@ function updateNavOnLogin() {
   $(".main-nav-links").show();
   $navLogin.hide();
   $navLogOut.show();
+  $navSubmitStory.show();
   $navUserProfile.text(`${currentUser.username}`).show();
 }
+
+// Listener for when users click submit in nav b
+
+function navSubmitStory() {
+  console.debug("navSubmitStory");
+  hidePageComponents();
+  $newStoryForm.show();
+}
+
+$navSubmitStory.on("click", navSubmitStory);
