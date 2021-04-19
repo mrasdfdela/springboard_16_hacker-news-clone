@@ -2,6 +2,7 @@
 
 // global to hold the User instance of the currently-logged-in user
 let currentUser;
+let currentUserFavs;
 
 /******************************************************************************
  * User login/signup/login
@@ -80,6 +81,7 @@ async function checkForRememberedUser() {
 
   // try to log in with these credentials (will be null if login failed)
   currentUser = await User.loginViaStoredCredentials(token, username);
+  currentUserFavs = currentUser.favorites.map((el) => el.storyId);
 }
 
 /** Sync current user information to localStorage.

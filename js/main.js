@@ -13,6 +13,9 @@ const $newStoryForm = $("#new-story-form");
 
 const $navLogin = $("#nav-login");
 const $navUserProfile = $("#nav-user-profile");
+const $navView = $("#nav-view")
+const $navViewFavs = $("#nav-view-favs");
+const $navViewAll = $("#nav-view-all");
 const $navSubmitStory = $("#nav-submit-story");
 const $navLogOut = $("#nav-logout");
 

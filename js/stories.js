@@ -83,14 +83,44 @@ $newStoryForm.on("submit", (e)=>{
 });
 
 function updateFavIcon(id, favIcon) {
-  // console.log(currentUser.favorites.map);
-  const userFavs = currentUser.favorites.map( el => el.storyId);
 
-  if (userFavs.includes(id)) {
+  if (currentUserFavs.includes(id)) {
     favIcon.addClass("fas");
     favIcon.removeClass("far");
   } else {
     favIcon.addClass("far");
     favIcon.removeClass("fas");
   }
+}
+
+// Toggle display of favorite items
+function toggleFavsDisplay(){
+  // favIds = currentUserFavs 
+  // console.log($allStoriesList.children("li"));
+
+  // Question: How would I do this using jQuery? It looks like 'storyLi' is not a jQuery object, so I am  
+  // const storyEls = $allStoriesList.children("li");
+  // for (let storyLi of storyEls) {
+  //   let id = storyLi.id;
+  //   if (currentUserFavs.includes(id)) {
+  //     console.log(storyLi);
+  //     storyLi.classList.toggle("story-hidden");
+  //   }
+  // }
+}
+
+function putFavoriteStoriesOnPage() {
+  console.debug("putFavoriteStoriesOnPage");
+
+  $allStoriesList.empty();
+
+  // loop through all of our stories and generate HTML for favorites
+  for (let story of storyList.stories) {
+    if (currentUserFavs.includes(story.storyId)) {
+      const $story = generateStoryMarkup(story);
+      $allStoriesList.append($story);
+    }
+  }
+
+  $allStoriesList.show();
 }

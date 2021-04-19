@@ -202,33 +202,32 @@ class User {
   }
 
   async addUserFav(storyId) {
-    // post request to add favorite to currentUser
-    console.log('adding favorite')
-    const username = currentUser.username
+    // remove story from list of currentUser favorites via post request
+    console.log("adding favorite");
+    const username = currentUser.username;
 
     await axios({
       url: `${BASE_URL}/users/${username}/favorites/${storyId}`,
       method: "POST",
       data: {
         token: currentUser.loginToken,
-        storyId: storyId
-      }
-    })
-    
+        storyId: storyId,
+      },
+    });
   }
 
   async deleteUserFav(storyId) {
-    // delete request to remove favorite from currentUser
-    console.log('deleting favorite')
-    const username = currentUser.username
+    // remove story from list of currentUser favorites via delete request
+    console.log("deleting favorite");
+    const username = currentUser.username;
 
     await axios({
       url: `${BASE_URL}/users/${username}/favorites/${storyId}`,
       method: "DELETE",
       data: {
         token: currentUser.loginToken,
-        storyId: storyId
-      }
-    })
+        storyId: storyId,
+      },
+    });
   }
 }

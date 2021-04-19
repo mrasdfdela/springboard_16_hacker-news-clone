@@ -33,6 +33,8 @@ function updateNavOnLogin() {
   $navLogin.hide();
   $navLogOut.show();
   $navSubmitStory.show();
+  $navViewFavs.show();
+  $navViewAll.hide();
   $navUserProfile.text(`${currentUser.username}`).show();
 }
 
@@ -45,3 +47,17 @@ function navSubmitStory() {
 }
 
 $navSubmitStory.on("click", navSubmitStory);
+
+function updateNavViewFavorites() {
+  $navViewFavs.toggle();
+  $navViewAll.toggle();
+}
+
+$navView.on("click",function(e){
+  updateNavViewFavorites()
+  if (e.target.id === 'nav-view-favs') {
+    putFavoriteStoriesOnPage();
+  } else {
+    putStoriesOnPage();
+  }
+});
