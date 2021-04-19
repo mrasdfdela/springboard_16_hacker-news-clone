@@ -2,7 +2,7 @@
 
 // global to hold the User instance of the currently-logged-in user
 let currentUser;
-let currentUserFavs;
+let currentUserFavs; //shortcut for mapped list
 
 /******************************************************************************
  * User login/signup/login
@@ -121,23 +121,19 @@ function updateUIOnUserLogin() {
 // 
 
 function updateUserFavoritesList(){
-  currentUserFavs = currentUser.favorites.map((el) => el.storyId);
+  currentUserFavs = currentUser.favorites.map( el => el.storyId );
 }
 
-
+// Todo: Move to User in models.js
 async function toggleUserFav(articleId, favIcon) {
-  const favList = currentUser.favorites.map( (el)=>el.storyId );
-  if (favList.includes(articleId)) {
-    await currentUser.deleteUserFav(articleId)
+  updateUserFavoritesList();
+  
+  if (currentUserFavs.includes(articleId)) {
+    await currentUser.deleteUserFav(articleId);
   } else {
-    await currentUser.addUserFav(articleId)
+    await currentUser.addUserFav(articleId);
   }
 
-  await checkForRememberedUser();
+  await checkForRememberedUser(); // checkForRememberedUser is meant to be called on page load, but is helpful for updating currentUser data. Is there another way to update this?
   updateFavIcon(articleId, favIcon);
 }
-
-$allStoriesList.on("click","i",function(){
-  const articleId = $(this).parent().attr("id");
-  toggleUserFav(articleId, $(this));
-});

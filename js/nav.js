@@ -55,9 +55,12 @@ function updateNavViewFavorites() {
 
 $navView.on("click",function(e){
   updateNavViewFavorites()
-  if (e.target.id === 'nav-view-favs') {
-    putFavoriteStoriesOnPage();
-  } else {
-    putStoriesOnPage();
+  switch (e.target.id) {
+    case 'nav-view-favs':
+      putFavoriteStoriesOnPage();
+      break;
+    case 'nav-view-all':
+      putStoriesOnPage();
+      break;
   }
 });

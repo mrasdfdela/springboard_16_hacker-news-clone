@@ -74,7 +74,7 @@ class StoryList {
    */
 
   static async addStory(user, newStory) {
-    // UNIMPLEMENTED: complete this function!     
+    console.debug("addStory")
     let res = await axios({
       url: `${BASE_URL}/stories`,
       method: "post",
@@ -86,6 +86,20 @@ class StoryList {
 
     let someStory = new Story(res.data.story); // needed to check return of API
     return someStory;
+  }
+
+  static async deleteStory(storyId){
+    console.debug("deleteStory");
+    await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: "delete",
+      data: {
+        token: currentUser.loginToken,
+        storyId: storyId
+      }
+    })
+
+    $(`#${storyId}`).remove();
   }
 }
 
@@ -203,7 +217,7 @@ class User {
 
   async addUserFav(storyId) {
     // remove story from list of currentUser favorites via post request
-    console.log("adding favorite");
+    console.debug("addUserFav");
     const username = currentUser.username;
 
     await axios({
@@ -218,7 +232,7 @@ class User {
 
   async deleteUserFav(storyId) {
     // remove story from list of currentUser favorites via delete request
-    console.log("deleting favorite");
+    console.debug("deleteUserFav");
     const username = currentUser.username;
 
     await axios({

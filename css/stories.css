@@ -8,6 +8,7 @@
   color: gray;
   font-size: 0.8rem;
   margin: 10px 0;
+  position: relative;
 }
 
 #stories-loading-msg {
@@ -36,4 +37,12 @@
 
 .story-user {
   display: block;
+}
+
+/* Story delete buttons */
+
+.stories-list button {
+  position: absolute;
+  right: 0;
+  top: 0;
 }
