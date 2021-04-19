@@ -23,8 +23,15 @@ function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
+  const userFavs = currentUser.favorites.map( el => el.storyId );
+
+  let favIndicator = userFavs.includes(story.storyId)
+    ? 'fas'
+    : 'far'
+  
   return $(`
       <li id="${story.storyId}">
+        <i class="${favIndicator} fa-star"></i>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -74,3 +81,16 @@ $newStoryForm.on("submit", (e)=>{
   e.preventDefault();
   addNewStory();
 });
+
+function updateFavIcon(id, favIcon) {
+  // console.log(currentUser.favorites.map);
+  const userFavs = currentUser.favorites.map( el => el.storyId);
+
+  if (userFavs.includes(id)) {
+    favIcon.addClass("fas");
+    favIcon.removeClass("far");
+  } else {
+    favIcon.addClass("far");
+    favIcon.removeClass("fas");
+  }
+}

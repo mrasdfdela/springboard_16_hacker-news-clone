@@ -100,21 +100,17 @@ class User {
    *   - token
    */
 
-  constructor({
-                username,
-                name,
-                createdAt,
-                favorites = [],
-                ownStories = []
-              },
-              token) {
+  constructor(
+    { username, name, createdAt, favorites = [], ownStories = [] },
+    token
+  ) {
     this.username = username;
     this.name = name;
     this.createdAt = createdAt;
 
     // instantiate Story instances for the user's favorites and ownStories
-    this.favorites = favorites.map(s => new Story(s));
-    this.ownStories = ownStories.map(s => new Story(s));
+    this.favorites = favorites.map((s) => new Story(s));
+    this.ownStories = ownStories.map((s) => new Story(s));
 
     // store the login token on the user so it's easy to find for API calls.
     this.loginToken = token;
@@ -134,7 +130,7 @@ class User {
       data: { user: { username, password, name } },
     });
 
-    let { user } = response.data
+    let { user } = response.data;
 
     return new User(
       {
@@ -142,7 +138,7 @@ class User {
         name: user.name,
         createdAt: user.createdAt,
         favorites: user.favorites,
-        ownStories: user.stories
+        ownStories: user.stories,
       },
       response.data.token
     );
@@ -169,7 +165,7 @@ class User {
         name: user.name,
         createdAt: user.createdAt,
         favorites: user.favorites,
-        ownStories: user.stories
+        ownStories: user.stories,
       },
       response.data.token
     );
@@ -195,7 +191,7 @@ class User {
           name: user.name,
           createdAt: user.createdAt,
           favorites: user.favorites,
-          ownStories: user.stories
+          ownStories: user.stories,
         },
         token
       );
@@ -203,5 +199,36 @@ class User {
       console.error("loginViaStoredCredentials failed", err);
       return null;
     }
+  }
+
+  async addUserFav(storyId) {
+    // post request to add favorite to currentUser
+    console.log('adding favorite')
+    const username = currentUser.username
+
+    await axios({
+      url: `${BASE_URL}/users/${username}/favorites/${storyId}`,
+      method: "POST",
+      data: {
+        token: currentUser.loginToken,
+        storyId: storyId
+      }
+    })
+    
+  }
+
+  async deleteUserFav(storyId) {
+    // delete request to remove favorite from currentUser
+    console.log('deleting favorite')
+    const username = currentUser.username
+
+    await axios({
+      url: `${BASE_URL}/users/${username}/favorites/${storyId}`,
+      method: "DELETE",
+      data: {
+        token: currentUser.loginToken,
+        storyId: storyId
+      }
+    })
   }
 }

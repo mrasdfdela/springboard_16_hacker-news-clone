@@ -114,3 +114,22 @@ function updateUIOnUserLogin() {
 
   updateNavOnLogin();
 }
+
+// 
+
+async function toggleUserFav(articleId, favIcon) {
+  const favList = currentUser.favorites.map( (el)=>el.storyId );
+  if (favList.includes(articleId)) {
+    await currentUser.deleteUserFav(articleId)
+  } else {
+    await currentUser.addUserFav(articleId)
+  }
+
+  await checkForRememberedUser();
+  updateFavIcon(articleId, favIcon);
+}
+
+$allStoriesList.on("click","i",function(){
+  const articleId = $(this).parent().attr("id");
+  toggleUserFav(articleId, $(this));
+});
