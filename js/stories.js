@@ -23,15 +23,9 @@ function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
-  const userFavs = currentUser.favorites.map( el => el.storyId );
-
-  let favIndicator = userFavs.includes(story.storyId)
-    ? 'fas'
-    : 'far'
   
   return $(`
       <li id="${story.storyId}">
-        <i class="${favIndicator} fa-star"></i>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -53,9 +47,19 @@ function putStoriesOnPage() {
   for (let story of storyList.stories) {
     const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
+    currentUser ? addFavIcons(story) : ''
   }
 
   $allStoriesList.show();
+}
+
+function addFavIcons(story) {
+  const userFavs = currentUser.favorites.map((el) => el.storyId);
+  let favIndicator = userFavs.includes(story.storyId) ? "fas" : "far";
+  
+  const $newFavIcon = $('<i>')
+  $newFavIcon.addClass(['fa-star',favIndicator])
+  $(`#${story.storyId}`).prepend($newFavIcon);
 }
 
 // Submits new stories using data from forms
