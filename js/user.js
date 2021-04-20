@@ -14,19 +14,22 @@ async function login(evt) {
   console.debug("login", evt);
   evt.preventDefault();
 
-  // grab the username and password
-  const username = $("#login-username").val();
-  const password = $("#login-password").val();
-
-  // User.login retrieves user info from API and returns User instance
-  // which we'll make the globally-available, logged-in user.
-  currentUser = await User.login(username, password);
+  try {
+    const username = $("#login-username").val();
+    const password = $("#login-password").val();
+    // grab the username and password
+  
+    // User.login retrieves user info from API and returns User instance
+    // which we'll make the globally-available, logged-in user.
+    currentUser = await User.login(username, password);
+    saveUserCredentialsInLocalStorage();
+    updateUIOnUserLogin();
+    updateUserFavoritesList();
+  } catch(e) {
+    alert('Invalid credentials!');
+  }
 
   $loginForm.trigger("reset");
-
-  saveUserCredentialsInLocalStorage();
-  updateUIOnUserLogin();
-  updateUserFavoritesList();
 }
 
 $loginForm.on("submit", login);
@@ -37,16 +40,20 @@ async function signup(evt) {
   console.debug("signup", evt);
   evt.preventDefault();
 
-  const name = $("#signup-name").val();
-  const username = $("#signup-username").val();
-  const password = $("#signup-password").val();
-
-  // User.signup retrieves user info from API and returns User instance
-  // which we'll make the globally-available, logged-in user.
-  currentUser = await User.signup(username, password, name);
-
-  saveUserCredentialsInLocalStorage();
-  updateUIOnUserLogin();
+  try {
+    const name = $("#signup-name").val();
+    const username = $("#signup-username").val();
+    const password = $("#signup-password").val();
+  
+    // User.signup retrieves user info from API and returns User instance
+    // which we'll make the globally-available, logged-in user.
+    currentUser = await User.signup(username, password, name);
+  
+    saveUserCredentialsInLocalStorage();
+    updateUIOnUserLogin();
+  } catch(e) {
+    alert('Username is already taken!');
+  }
 
   $signupForm.trigger("reset");
 }
@@ -122,18 +129,4 @@ function updateUIOnUserLogin() {
 
 function updateUserFavoritesList(){
   currentUserFavs = currentUser.favorites.map( el => el.storyId );
-}
-
-// Todo: Move to User in models.js
-async function toggleUserFav(articleId, favIcon) {
-  updateUserFavoritesList();
-  
-  if (currentUserFavs.includes(articleId)) {
-    await currentUser.deleteUserFav(articleId);
-  } else {
-    await currentUser.addUserFav(articleId);
-  }
-
-  await checkForRememberedUser(); // checkForRememberedUser is meant to be called on page load, but is helpful for updating currentUser data. Is there another way to update this?
-  updateFavIcon(articleId, favIcon);
 }

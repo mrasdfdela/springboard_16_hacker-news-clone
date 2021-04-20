@@ -39,10 +39,16 @@
   display: block;
 }
 
-/* Story delete buttons */
+/* Story buttons */
 
-.stories-list button {
+.stories-list .story-btn-delete {
   position: absolute;
   right: 0;
+  top: 0;
+}
+
+.stories-list .story-btn-edit {
+  position: absolute;
+  right: 5em;
   top: 0;
 }

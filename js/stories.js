@@ -2,6 +2,7 @@
 
 // This is the global list of the stories, an instance of StoryList
 let storyList;
+let currentUserStories;
 
 /** Get and show stories when site first loads. */
 
@@ -50,6 +51,7 @@ function putStoriesOnPage() {
     if (currentUser) {
       addFavIcons(story);
       addDeleteBtn(story);
+      addEditBtn(story);
     }
   }
 
@@ -71,6 +73,7 @@ function putFavoriteStoriesOnPage() {
     }
     if (currentUser) {
       addDeleteBtn(story);
+      addEditBtn(story);
     }
   }
 
@@ -86,34 +89,45 @@ function addFavIcons(story) {
   $(`#${story.storyId}`).prepend($newFavIcon);
 }
 
-function addDeleteBtn(story){
-  const currentUserStories = currentUser.ownStories.map( el => el.storyId);
+function updateCurrentUserStories(){
+  currentUserStories = currentUser.ownStories.map((el) => el.storyId);
+}
 
+function addDeleteBtn(story){
+  updateCurrentUserStories();
   if (currentUserStories.includes(story.storyId)) {
     const $newDeleteBtn = $("<button>");
     $newDeleteBtn.text("delete");
+    $newDeleteBtn.addClass("story-btn-delete");
     $(`#${story.storyId}`).append($newDeleteBtn);
   }
+}
+
+function addEditBtn(story){
+  // updateCurrentUserStories();
+  // if (currentUserStories.includes(story.storyId)) {
+  //   const $newEditBtn = $("<button>");
+  //   $newEditBtn.text("edit");
+  //   $newEditBtn.addClass("story-btn-edit");
+  //   $(`#${story.storyId}`).append($newEditBtn);
+  // }
 }
 
 // Submits new stories using data from forms
 async function addNewStory() {
   console.debug("addNewStory")
 
-  const $newStoryAuthor = $("#new-story-author");
-  const $newStoryTitle = $("#new-story-title");
-  const $newStoryUrl = $("#new-story-url");
-  
-  const storyFormData = {
-    author: $newStoryAuthor.val(),
-    title: $newStoryTitle.val(),
-    url: $newStoryUrl.val()
-  }
-  await StoryList.addStory(currentUser, storyFormData);
+  await StoryList.addStory(
+    currentUser, 
+    {
+      author: $("#new-story-author").val(),
+      title: $("#new-story-title").val(),
+      url: $("#new-story-url").val()
+    });
   
   $newStoryForm.trigger("reset");
   hidePageComponents();
-  checkForRememberedUser();
+  updateNavOnLogin();
   getAndShowStoriesOnStart();
 }
 
@@ -152,8 +166,8 @@ function toggleFavsDisplay(){
 
 // Favorite icon (star) listener for toggling favorite stories
 $allStoriesList.on("click", "i", function () {
-  const articleId = $(this).parent().attr("id");
-  toggleUserFav(articleId, $(this));
+  const storyId = $(this).parent().attr("id");
+  User.toggleUserFav(storyId, $(this));
 });
 
 //  Button listener for deleting stories (only applies to user's own stories) 

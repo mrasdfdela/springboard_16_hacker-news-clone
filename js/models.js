@@ -215,33 +215,24 @@ class User {
     }
   }
 
-  async addUserFav(storyId) {
-    // remove story from list of currentUser favorites via post request
-    console.debug("addUserFav");
-    const username = currentUser.username;
+  static async toggleUserFav(storyId, favIcon) {
+    const user = currentUser.username;
+    let methodVar = "";
+    currentUserFavs.includes(storyId)
+      ? (methodVar = "DELETE")
+      : (methodVar = "POST");
 
-    await axios({
-      url: `${BASE_URL}/users/${username}/favorites/${storyId}`,
-      method: "POST",
+    const res = await axios({
+      url: `${BASE_URL}/users/${user}/favorites/${storyId}`,
+      method: methodVar,
       data: {
         token: currentUser.loginToken,
         storyId: storyId,
       },
     });
-  }
-
-  async deleteUserFav(storyId) {
-    // remove story from list of currentUser favorites via delete request
-    console.debug("deleteUserFav");
-    const username = currentUser.username;
-
-    await axios({
-      url: `${BASE_URL}/users/${username}/favorites/${storyId}`,
-      method: "DELETE",
-      data: {
-        token: currentUser.loginToken,
-        storyId: storyId,
-      },
-    });
+    
+    currentUser.favorites = res.data.user.favorites.map( st => new Story(st) );
+    updateUserFavoritesList();
+    updateFavIcon(storyId, favIcon);
   }
 }
